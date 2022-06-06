@@ -1,0 +1,17 @@
+program test::
+var a,b,c,d,v,f, g:int;
+var boo:bool;
+{
+	a := 0;
+	b := 5*a + 1;
+	write a+ b;
+    while(a < 4) do 
+    {
+        a := a + 1;
+    }
+    endwh;
+
+	
+	
+
+}

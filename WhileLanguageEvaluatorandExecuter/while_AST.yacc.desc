@@ -1,0 +1,1290 @@
+
+state 0:
+
+	START : . PROGRAM 
+
+	PROGT	shift 2
+
+	START	goto 82
+	PROGRAM	goto 1
+
+	.	error
+
+
+state 1:
+
+	START : PROGRAM .  (reduce by rule 0)
+
+
+
+	.	reduce by rule 0
+
+
+state 2:
+
+	PROGRAM : PROGT . ID COLON BLOCK 
+
+	ID	shift 3
+
+
+	.	error
+
+
+state 3:
+
+	PROGRAM : PROGT ID . COLON BLOCK 
+
+	COLON	shift 4
+
+
+	.	error
+
+
+state 4:
+
+	PROGRAM : PROGT ID COLON . BLOCK 
+
+	VAR	shift 10
+	BRACEL	shift 9
+
+	BLOCK	goto 8
+	DECLARATION	goto 7
+	DECLARATIONSEQ	goto 6
+	COMMANDSEQ	goto 5
+
+	.	error
+
+
+state 5:
+
+	BLOCK : COMMANDSEQ .  (reduce by rule 3)
+
+
+
+	.	reduce by rule 3
+
+
+state 6:
+
+	BLOCK : DECLARATIONSEQ . COMMANDSEQ 
+	DECLARATIONSEQ : DECLARATIONSEQ . DECLARATION 
+
+	VAR	shift 10
+	BRACEL	shift 9
+
+	DECLARATION	goto 12
+	COMMANDSEQ	goto 11
+
+	.	error
+
+
+state 7:
+
+	DECLARATIONSEQ : DECLARATION .  (reduce by rule 5)
+
+
+
+	.	reduce by rule 5
+
+
+state 8:
+
+	PROGRAM : PROGT ID COLON BLOCK .  (reduce by rule 1)
+
+
+
+	.	reduce by rule 1
+
+
+state 9:
+
+	COMMANDSEQ : BRACEL . TEMPCOM BRACER 
+	COMMANDSEQ : BRACEL . BRACER 
+
+	BRACER	shift 20
+	READ	shift 19
+	WRITE	shift 18
+	WHILE	shift 17
+	ID	shift 16
+	IF	shift 15
+
+	COMMAND	goto 14
+	TEMPCOM	goto 13
+
+	.	error
+
+
+state 10:
+
+	DECLARATION : VAR . VARIABLELIST LISTYPE VTYPE TERM 
+
+	ID	shift 22
+
+	VARIABLELIST	goto 21
+
+	.	error
+
+
+state 11:
+
+	BLOCK : DECLARATIONSEQ COMMANDSEQ .  (reduce by rule 2)
+
+
+
+	.	reduce by rule 2
+
+
+state 12:
+
+	DECLARATIONSEQ : DECLARATIONSEQ DECLARATION .  (reduce by rule 4)
+
+
+
+	.	reduce by rule 4
+
+
+state 13:
+
+	COMMANDSEQ : BRACEL TEMPCOM . BRACER 
+
+	BRACER	shift 23
+
+
+	.	error
+
+
+state 14:
+
+	TEMPCOM : COMMAND . TERM TEMPCOM 
+	TEMPCOM : COMMAND . TERM 
+
+	TERM	shift 24
+
+
+	.	error
+
+
+state 15:
+
+	COMMAND : IF . FAC THEN COMMANDSEQ ELSE COMMANDSEQ ENDIF 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 25
+
+	.	error
+
+
+state 16:
+
+	COMMAND : ID . ASSIGN FAC 
+
+	ASSIGN	shift 33
+
+
+	.	error
+
+
+state 17:
+
+	COMMAND : WHILE . FAC DO COMMANDSEQ ENDWH 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 34
+
+	.	error
+
+
+state 18:
+
+	COMMAND : WRITE . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 35
+
+	.	error
+
+
+state 19:
+
+	COMMAND : READ . ID 
+
+	ID	shift 36
+
+
+	.	error
+
+
+state 20:
+
+	COMMANDSEQ : BRACEL BRACER .  (reduce by rule 12)
+
+
+
+	.	reduce by rule 12
+
+
+state 21:
+
+	DECLARATION : VAR VARIABLELIST . LISTYPE VTYPE TERM 
+	VARIABLELIST : VARIABLELIST . COMMA ID 
+
+	LISTYPE	shift 38
+	COMMA	shift 37
+
+
+	.	error
+
+
+state 22:
+
+	VARIABLELIST : ID .  (reduce by rule 9)
+
+
+
+	.	reduce by rule 9
+
+
+state 23:
+
+	COMMANDSEQ : BRACEL TEMPCOM BRACER .  (reduce by rule 11)
+
+
+
+	.	reduce by rule 11
+
+
+state 24:
+
+	TEMPCOM : COMMAND TERM . TEMPCOM 
+	TEMPCOM : COMMAND TERM .  (reduce by rule 14)
+
+	READ	shift 19
+	WRITE	shift 18
+	WHILE	shift 17
+	ID	shift 16
+	IF	shift 15
+
+	COMMAND	goto 14
+	TEMPCOM	goto 39
+
+	.	reduce by rule 14
+
+
+state 25:
+
+	COMMAND : IF FAC . THEN COMMANDSEQ ELSE COMMANDSEQ ENDIF 
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+	LESS	shift 52
+	GREAT	shift 51
+	LESSEQ	shift 50
+	GREATEQ	shift 49
+	EQUAL	shift 48
+	PLUS	shift 47
+	MINUS	shift 46
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+	AND	shift 42
+	OR	shift 41
+	THEN	shift 40
+
+
+	.	error
+
+
+state 26:
+
+	FAC : NEGATE . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 53
+
+	.	error
+
+
+state 27:
+
+	FAC : ID .  (reduce by rule 21)
+
+
+
+	.	reduce by rule 21
+
+
+state 28:
+
+	FAC : NUM .  (reduce by rule 20)
+
+
+
+	.	reduce by rule 20
+
+
+state 29:
+
+	FAC : FF .  (reduce by rule 24)
+
+
+
+	.	reduce by rule 24
+
+
+state 30:
+
+	FAC : TT .  (reduce by rule 23)
+
+
+
+	.	reduce by rule 23
+
+
+state 31:
+
+	FAC : NOT . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 54
+
+	.	error
+
+
+state 32:
+
+	FAC : LEFTP . FAC RIGHTP 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 55
+
+	.	error
+
+
+state 33:
+
+	COMMAND : ID ASSIGN . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 56
+
+	.	error
+
+
+state 34:
+
+	COMMAND : WHILE FAC . DO COMMANDSEQ ENDWH 
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+	LESS	shift 52
+	GREAT	shift 51
+	LESSEQ	shift 50
+	GREATEQ	shift 49
+	EQUAL	shift 48
+	PLUS	shift 47
+	MINUS	shift 46
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+	AND	shift 42
+	OR	shift 41
+	DO	shift 57
+
+
+	.	error
+
+
+state 35:
+
+	COMMAND : WRITE FAC .  (reduce by rule 17)
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+	LESS	shift 52
+	GREAT	shift 51
+	LESSEQ	shift 50
+	GREATEQ	shift 49
+	EQUAL	shift 48
+	PLUS	shift 47
+	MINUS	shift 46
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+	AND	shift 42
+	OR	shift 41
+
+
+	.	reduce by rule 17
+
+
+state 36:
+
+	COMMAND : READ ID .  (reduce by rule 16)
+
+
+
+	.	reduce by rule 16
+
+
+state 37:
+
+	VARIABLELIST : VARIABLELIST COMMA . ID 
+
+	ID	shift 58
+
+
+	.	error
+
+
+state 38:
+
+	DECLARATION : VAR VARIABLELIST LISTYPE . VTYPE TERM 
+
+	INT	shift 61
+	BOOL	shift 60
+
+	VTYPE	goto 59
+
+	.	error
+
+
+state 39:
+
+	TEMPCOM : COMMAND TERM TEMPCOM .  (reduce by rule 13)
+
+
+
+	.	reduce by rule 13
+
+
+state 40:
+
+	COMMAND : IF FAC THEN . COMMANDSEQ ELSE COMMANDSEQ ENDIF 
+
+	BRACEL	shift 9
+
+	COMMANDSEQ	goto 62
+
+	.	error
+
+
+state 41:
+
+	FAC : FAC OR . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 63
+
+	.	error
+
+
+state 42:
+
+	FAC : FAC AND . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 64
+
+	.	error
+
+
+state 43:
+
+	FAC : FAC REM . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 65
+
+	.	error
+
+
+state 44:
+
+	FAC : FAC MUL . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 66
+
+	.	error
+
+
+state 45:
+
+	FAC : FAC DIV . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 67
+
+	.	error
+
+
+state 46:
+
+	FAC : FAC MINUS . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 68
+
+	.	error
+
+
+state 47:
+
+	FAC : FAC PLUS . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 69
+
+	.	error
+
+
+state 48:
+
+	FAC : FAC EQUAL . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 70
+
+	.	error
+
+
+state 49:
+
+	FAC : FAC GREATEQ . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 71
+
+	.	error
+
+
+state 50:
+
+	FAC : FAC LESSEQ . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 72
+
+	.	error
+
+
+state 51:
+
+	FAC : FAC GREAT . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 73
+
+	.	error
+
+
+state 52:
+
+	FAC : FAC LESS . FAC 
+
+	LEFTP	shift 32
+	NOT	shift 31
+	TT	shift 30
+	FF	shift 29
+	NUM	shift 28
+	ID	shift 27
+	NEGATE	shift 26
+
+	FAC	goto 74
+
+	.	error
+
+
+state 53:
+
+	FAC : NEGATE FAC .  (reduce by rule 26)
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+
+
+	.	reduce by rule 26
+
+
+state 54:
+
+	FAC : NOT FAC .  (reduce by rule 25)
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+
+
+	.	reduce by rule 25
+
+
+state 55:
+
+	FAC : LEFTP FAC . RIGHTP 
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+	LESS	shift 52
+	GREAT	shift 51
+	LESSEQ	shift 50
+	GREATEQ	shift 49
+	EQUAL	shift 48
+	PLUS	shift 47
+	MINUS	shift 46
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+	RIGHTP	shift 75
+	AND	shift 42
+	OR	shift 41
+
+
+	.	error
+
+
+state 56:
+
+	COMMAND : ID ASSIGN FAC .  (reduce by rule 15)
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+	LESS	shift 52
+	GREAT	shift 51
+	LESSEQ	shift 50
+	GREATEQ	shift 49
+	EQUAL	shift 48
+	PLUS	shift 47
+	MINUS	shift 46
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+	AND	shift 42
+	OR	shift 41
+
+
+	.	reduce by rule 15
+
+
+state 57:
+
+	COMMAND : WHILE FAC DO . COMMANDSEQ ENDWH 
+
+	BRACEL	shift 9
+
+	COMMANDSEQ	goto 76
+
+	.	error
+
+
+state 58:
+
+	VARIABLELIST : VARIABLELIST COMMA ID .  (reduce by rule 10)
+
+
+
+	.	reduce by rule 10
+
+
+state 59:
+
+	DECLARATION : VAR VARIABLELIST LISTYPE VTYPE . TERM 
+
+	TERM	shift 77
+
+
+	.	error
+
+
+state 60:
+
+	VTYPE : BOOL .  (reduce by rule 8)
+
+
+
+	.	reduce by rule 8
+
+
+state 61:
+
+	VTYPE : INT .  (reduce by rule 7)
+
+
+
+	.	reduce by rule 7
+
+
+state 62:
+
+	COMMAND : IF FAC THEN COMMANDSEQ . ELSE COMMANDSEQ ENDIF 
+
+	ELSE	shift 78
+
+
+	.	error
+
+
+state 63:
+
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+	FAC : FAC OR FAC .  (reduce by rule 38)
+
+	PLUS	shift 47
+	MINUS	shift 46
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+
+
+	.	reduce by rule 38
+
+
+state 64:
+
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC AND FAC .  (reduce by rule 37)
+	FAC : FAC . OR FAC 
+
+	PLUS	shift 47
+	MINUS	shift 46
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+
+
+	.	reduce by rule 37
+
+
+state 65:
+
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC REM FAC .  (reduce by rule 31)
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+
+
+	.	reduce by rule 31
+
+
+state 66:
+
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC MUL FAC .  (reduce by rule 29)
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+
+
+	.	reduce by rule 29
+
+
+state 67:
+
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC DIV FAC .  (reduce by rule 30)
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+
+
+	.	reduce by rule 30
+
+
+state 68:
+
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC MINUS FAC .  (reduce by rule 28)
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+
+
+	.	reduce by rule 28
+
+
+state 69:
+
+	FAC : FAC . PLUS FAC 
+	FAC : FAC PLUS FAC .  (reduce by rule 27)
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+
+
+	.	reduce by rule 27
+
+
+state 70:
+
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC EQUAL FAC .  (reduce by rule 36)
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+	PLUS	shift 47
+	MINUS	shift 46
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+
+
+	.	reduce by rule 36
+
+
+state 71:
+
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC GREATEQ FAC .  (reduce by rule 33)
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+	PLUS	shift 47
+	MINUS	shift 46
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+
+
+	.	reduce by rule 33
+
+
+state 72:
+
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC LESSEQ FAC .  (reduce by rule 35)
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+	PLUS	shift 47
+	MINUS	shift 46
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+
+
+	.	reduce by rule 35
+
+
+state 73:
+
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC GREAT FAC .  (reduce by rule 32)
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+	PLUS	shift 47
+	MINUS	shift 46
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+
+
+	.	reduce by rule 32
+
+
+state 74:
+
+	FAC : FAC . PLUS FAC 
+	FAC : FAC . MINUS FAC 
+	FAC : FAC . MUL FAC 
+	FAC : FAC . DIV FAC 
+	FAC : FAC . REM FAC 
+	FAC : FAC . GREAT FAC 
+	FAC : FAC . GREATEQ FAC 
+	FAC : FAC . LESS FAC 
+	FAC : FAC LESS FAC .  (reduce by rule 34)
+	FAC : FAC . LESSEQ FAC 
+	FAC : FAC . EQUAL FAC 
+	FAC : FAC . AND FAC 
+	FAC : FAC . OR FAC 
+
+	PLUS	shift 47
+	MINUS	shift 46
+	DIV	shift 45
+	MUL	shift 44
+	REM	shift 43
+
+
+	.	reduce by rule 34
+
+
+state 75:
+
+	FAC : LEFTP FAC RIGHTP .  (reduce by rule 22)
+
+
+
+	.	reduce by rule 22
+
+
+state 76:
+
+	COMMAND : WHILE FAC DO COMMANDSEQ . ENDWH 
+
+	ENDWH	shift 79
+
+
+	.	error
+
+
+state 77:
+
+	DECLARATION : VAR VARIABLELIST LISTYPE VTYPE TERM .  (reduce by rule 6)
+
+
+
+	.	reduce by rule 6
+
+
+state 78:
+
+	COMMAND : IF FAC THEN COMMANDSEQ ELSE . COMMANDSEQ ENDIF 
+
+	BRACEL	shift 9
+
+	COMMANDSEQ	goto 80
+
+	.	error
+
+
+state 79:
+
+	COMMAND : WHILE FAC DO COMMANDSEQ ENDWH .  (reduce by rule 19)
+
+
+
+	.	reduce by rule 19
+
+
+state 80:
+
+	COMMAND : IF FAC THEN COMMANDSEQ ELSE COMMANDSEQ . ENDIF 
+
+	ENDIF	shift 81
+
+
+	.	error
+
+
+state 81:
+
+	COMMAND : IF FAC THEN COMMANDSEQ ELSE COMMANDSEQ ENDIF .  (reduce by rule 18)
+
+
+
+	.	reduce by rule 18
+
+
+state 82:
+
+
+	EOF	accept
+
+
+	.	error
+
+143 of 356 action table entries left after compaction
+36 goto table entries

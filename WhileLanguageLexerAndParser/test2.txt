@@ -1,0 +1,10 @@
+program a ::
+var a , y : int ;
+var x, g : bool ;
+{
+    x := 5;
+    if x = 5 then {x := 5;} else {x := 5/4*6%43;} endif;
+    while x = 5 do {x := 5; y := 6;} endwh;
+}
+  
+   

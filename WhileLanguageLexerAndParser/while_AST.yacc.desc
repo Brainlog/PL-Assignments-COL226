@@ -1,0 +1,881 @@
+
+state 0:
+
+	START : . PROGRAM 
+
+	PROGT	shift 2
+
+	START	goto 74
+	PROGRAM	goto 1
+
+	.	error
+
+
+state 1:
+
+	START : PROGRAM .  (reduce by rule 0)
+
+
+
+	.	reduce by rule 0
+
+
+state 2:
+
+	PROGRAM : PROGT . ID COLON BLOCK 
+
+	ID	shift 3
+
+
+	.	error
+
+
+state 3:
+
+	PROGRAM : PROGT ID . COLON BLOCK 
+
+	COLON	shift 4
+
+
+	.	error
+
+
+state 4:
+
+	PROGRAM : PROGT ID COLON . BLOCK 
+
+	VAR	shift 10
+	BRACEL	shift 9
+
+	BLOCK	goto 8
+	DECLARATION	goto 7
+	DECLARATIONSEQ	goto 6
+	COMMANDSEQ	goto 5
+
+	.	error
+
+
+state 5:
+
+	BLOCK : COMMANDSEQ .  (reduce by rule 3)
+
+
+
+	.	reduce by rule 3
+
+
+state 6:
+
+	BLOCK : DECLARATIONSEQ . COMMANDSEQ 
+	DECLARATIONSEQ : DECLARATIONSEQ . DECLARATION 
+
+	VAR	shift 10
+	BRACEL	shift 9
+
+	DECLARATION	goto 12
+	COMMANDSEQ	goto 11
+
+	.	error
+
+
+state 7:
+
+	DECLARATIONSEQ : DECLARATION .  (reduce by rule 5)
+
+
+
+	.	reduce by rule 5
+
+
+state 8:
+
+	PROGRAM : PROGT ID COLON BLOCK .  (reduce by rule 1)
+
+
+
+	.	reduce by rule 1
+
+
+state 9:
+
+	COMMANDSEQ : BRACEL . TEMPCOM BRACER 
+	COMMANDSEQ : BRACEL . BRACER 
+
+	BRACER	shift 20
+	READ	shift 19
+	WRITE	shift 18
+	WHILE	shift 17
+	ID	shift 16
+	IF	shift 15
+
+	COMMAND	goto 14
+	TEMPCOM	goto 13
+
+	.	error
+
+
+state 10:
+
+	DECLARATION : VAR . VARIABLELIST LISTYPE VTYPE TERM 
+
+	ID	shift 22
+
+	VARIABLELIST	goto 21
+
+	.	error
+
+
+state 11:
+
+	BLOCK : DECLARATIONSEQ COMMANDSEQ .  (reduce by rule 2)
+
+
+
+	.	reduce by rule 2
+
+
+state 12:
+
+	DECLARATIONSEQ : DECLARATIONSEQ DECLARATION .  (reduce by rule 4)
+
+
+
+	.	reduce by rule 4
+
+
+state 13:
+
+	COMMANDSEQ : BRACEL TEMPCOM . BRACER 
+	TEMPCOM : TEMPCOM . COMMAND TERM 
+
+	BRACER	shift 24
+	READ	shift 19
+	WRITE	shift 18
+	WHILE	shift 17
+	ID	shift 16
+	IF	shift 15
+
+	COMMAND	goto 23
+
+	.	error
+
+
+state 14:
+
+	TEMPCOM : COMMAND . TERM 
+
+	TERM	shift 25
+
+
+	.	error
+
+
+state 15:
+
+	COMMAND : IF . EXP THEN COMMANDSEQ ELSE COMMANDSEQ ENDIF 
+
+	LEFTP	shift 34
+	TT	shift 33
+	FF	shift 32
+	NUM	shift 31
+	ID	shift 30
+	NEGATE	shift 29
+	NOT	shift 28
+
+	EXP	goto 27
+	FAC	goto 26
+
+	.	error
+
+
+state 16:
+
+	COMMAND : ID . ASSIGN EXP 
+
+	ASSIGN	shift 35
+
+
+	.	error
+
+
+state 17:
+
+	COMMAND : WHILE . EXP DO COMMANDSEQ ENDWH 
+
+	LEFTP	shift 34
+	TT	shift 33
+	FF	shift 32
+	NUM	shift 31
+	ID	shift 30
+	NEGATE	shift 29
+	NOT	shift 28
+
+	EXP	goto 36
+	FAC	goto 26
+
+	.	error
+
+
+state 18:
+
+	COMMAND : WRITE . EXP 
+
+	LEFTP	shift 34
+	TT	shift 33
+	FF	shift 32
+	NUM	shift 31
+	ID	shift 30
+	NEGATE	shift 29
+	NOT	shift 28
+
+	EXP	goto 37
+	FAC	goto 26
+
+	.	error
+
+
+state 19:
+
+	COMMAND : READ . ID 
+
+	ID	shift 38
+
+
+	.	error
+
+
+state 20:
+
+	COMMANDSEQ : BRACEL BRACER .  (reduce by rule 12)
+
+
+
+	.	reduce by rule 12
+
+
+state 21:
+
+	DECLARATION : VAR VARIABLELIST . LISTYPE VTYPE TERM 
+	VARIABLELIST : VARIABLELIST . COMMA ID 
+
+	LISTYPE	shift 40
+	COMMA	shift 39
+
+
+	.	error
+
+
+state 22:
+
+	VARIABLELIST : ID .  (reduce by rule 9)
+
+
+
+	.	reduce by rule 9
+
+
+state 23:
+
+	TEMPCOM : TEMPCOM COMMAND . TERM 
+
+	TERM	shift 41
+
+
+	.	error
+
+
+state 24:
+
+	COMMANDSEQ : BRACEL TEMPCOM BRACER .  (reduce by rule 11)
+
+
+
+	.	reduce by rule 11
+
+
+state 25:
+
+	TEMPCOM : COMMAND TERM .  (reduce by rule 14)
+
+
+
+	.	reduce by rule 14
+
+
+state 26:
+
+	EXP : FAC .  (reduce by rule 21)
+
+
+
+	.	reduce by rule 21
+
+
+state 27:
+
+	COMMAND : IF EXP . THEN COMMANDSEQ ELSE COMMANDSEQ ENDIF 
+	EXP : EXP . OP2 FAC 
+
+	LESS	shift 55
+	GREAT	shift 54
+	LESSEQ	shift 53
+	GREATEQ	shift 52
+	EQUAL	shift 51
+	ADD	shift 50
+	SUB	shift 49
+	DIV	shift 48
+	MUL	shift 47
+	REM	shift 46
+	AND	shift 45
+	OR	shift 44
+	THEN	shift 43
+
+	OP2	goto 42
+
+	.	error
+
+
+state 28:
+
+	FAC : NOT . EXP 
+
+	LEFTP	shift 34
+	TT	shift 33
+	FF	shift 32
+	NUM	shift 31
+	ID	shift 30
+	NEGATE	shift 29
+	NOT	shift 28
+
+	EXP	goto 56
+	FAC	goto 26
+
+	.	error
+
+
+state 29:
+
+	FAC : NEGATE . EXP 
+
+	LEFTP	shift 34
+	TT	shift 33
+	FF	shift 32
+	NUM	shift 31
+	ID	shift 30
+	NEGATE	shift 29
+	NOT	shift 28
+
+	EXP	goto 57
+	FAC	goto 26
+
+	.	error
+
+
+state 30:
+
+	FAC : ID .  (reduce by rule 23)
+
+
+
+	.	reduce by rule 23
+
+
+state 31:
+
+	FAC : NUM .  (reduce by rule 22)
+
+
+
+	.	reduce by rule 22
+
+
+state 32:
+
+	FAC : FF .  (reduce by rule 26)
+
+
+
+	.	reduce by rule 26
+
+
+state 33:
+
+	FAC : TT .  (reduce by rule 25)
+
+
+
+	.	reduce by rule 25
+
+
+state 34:
+
+	FAC : LEFTP . EXP RIGHTP 
+
+	LEFTP	shift 34
+	TT	shift 33
+	FF	shift 32
+	NUM	shift 31
+	ID	shift 30
+	NEGATE	shift 29
+	NOT	shift 28
+
+	EXP	goto 58
+	FAC	goto 26
+
+	.	error
+
+
+state 35:
+
+	COMMAND : ID ASSIGN . EXP 
+
+	LEFTP	shift 34
+	TT	shift 33
+	FF	shift 32
+	NUM	shift 31
+	ID	shift 30
+	NEGATE	shift 29
+	NOT	shift 28
+
+	EXP	goto 59
+	FAC	goto 26
+
+	.	error
+
+
+state 36:
+
+	COMMAND : WHILE EXP . DO COMMANDSEQ ENDWH 
+	EXP : EXP . OP2 FAC 
+
+	LESS	shift 55
+	GREAT	shift 54
+	LESSEQ	shift 53
+	GREATEQ	shift 52
+	EQUAL	shift 51
+	ADD	shift 50
+	SUB	shift 49
+	DIV	shift 48
+	MUL	shift 47
+	REM	shift 46
+	AND	shift 45
+	OR	shift 44
+	DO	shift 60
+
+	OP2	goto 42
+
+	.	error
+
+
+state 37:
+
+	COMMAND : WRITE EXP .  (reduce by rule 17)
+	EXP : EXP . OP2 FAC 
+
+	LESS	shift 55
+	GREAT	shift 54
+	LESSEQ	shift 53
+	GREATEQ	shift 52
+	EQUAL	shift 51
+	ADD	shift 50
+	SUB	shift 49
+	DIV	shift 48
+	MUL	shift 47
+	REM	shift 46
+	AND	shift 45
+	OR	shift 44
+
+	OP2	goto 42
+
+	.	reduce by rule 17
+
+
+state 38:
+
+	COMMAND : READ ID .  (reduce by rule 16)
+
+
+
+	.	reduce by rule 16
+
+
+state 39:
+
+	VARIABLELIST : VARIABLELIST COMMA . ID 
+
+	ID	shift 61
+
+
+	.	error
+
+
+state 40:
+
+	DECLARATION : VAR VARIABLELIST LISTYPE . VTYPE TERM 
+
+	INT	shift 64
+	BOOL	shift 63
+
+	VTYPE	goto 62
+
+	.	error
+
+
+state 41:
+
+	TEMPCOM : TEMPCOM COMMAND TERM .  (reduce by rule 13)
+
+
+
+	.	reduce by rule 13
+
+
+state 42:
+
+	EXP : EXP OP2 . FAC 
+
+	LEFTP	shift 34
+	TT	shift 33
+	FF	shift 32
+	NUM	shift 31
+	ID	shift 30
+	NEGATE	shift 29
+	NOT	shift 28
+
+	FAC	goto 65
+
+	.	error
+
+
+state 43:
+
+	COMMAND : IF EXP THEN . COMMANDSEQ ELSE COMMANDSEQ ENDIF 
+
+	BRACEL	shift 9
+
+	COMMANDSEQ	goto 66
+
+	.	error
+
+
+state 44:
+
+	OP2 : OR .  (reduce by rule 40)
+
+
+
+	.	reduce by rule 40
+
+
+state 45:
+
+	OP2 : AND .  (reduce by rule 39)
+
+
+
+	.	reduce by rule 39
+
+
+state 46:
+
+	OP2 : REM .  (reduce by rule 33)
+
+
+
+	.	reduce by rule 33
+
+
+state 47:
+
+	OP2 : MUL .  (reduce by rule 31)
+
+
+
+	.	reduce by rule 31
+
+
+state 48:
+
+	OP2 : DIV .  (reduce by rule 32)
+
+
+
+	.	reduce by rule 32
+
+
+state 49:
+
+	OP2 : SUB .  (reduce by rule 30)
+
+
+
+	.	reduce by rule 30
+
+
+state 50:
+
+	OP2 : ADD .  (reduce by rule 29)
+
+
+
+	.	reduce by rule 29
+
+
+state 51:
+
+	OP2 : EQUAL .  (reduce by rule 38)
+
+
+
+	.	reduce by rule 38
+
+
+state 52:
+
+	OP2 : GREATEQ .  (reduce by rule 35)
+
+
+
+	.	reduce by rule 35
+
+
+state 53:
+
+	OP2 : LESSEQ .  (reduce by rule 37)
+
+
+
+	.	reduce by rule 37
+
+
+state 54:
+
+	OP2 : GREAT .  (reduce by rule 34)
+
+
+
+	.	reduce by rule 34
+
+
+state 55:
+
+	OP2 : LESS .  (reduce by rule 36)
+
+
+
+	.	reduce by rule 36
+
+
+state 56:
+
+	EXP : EXP . OP2 FAC 
+	FAC : NOT EXP .  (reduce by rule 27)
+
+
+	OP2	goto 42
+
+	.	reduce by rule 27
+
+
+state 57:
+
+	EXP : EXP . OP2 FAC 
+	FAC : NEGATE EXP .  (reduce by rule 28)
+
+
+	OP2	goto 42
+
+	.	reduce by rule 28
+
+
+state 58:
+
+	EXP : EXP . OP2 FAC 
+	FAC : LEFTP EXP . RIGHTP 
+
+	LESS	shift 55
+	GREAT	shift 54
+	LESSEQ	shift 53
+	GREATEQ	shift 52
+	EQUAL	shift 51
+	ADD	shift 50
+	SUB	shift 49
+	DIV	shift 48
+	MUL	shift 47
+	REM	shift 46
+	RIGHTP	shift 67
+	AND	shift 45
+	OR	shift 44
+
+	OP2	goto 42
+
+	.	error
+
+
+state 59:
+
+	COMMAND : ID ASSIGN EXP .  (reduce by rule 15)
+	EXP : EXP . OP2 FAC 
+
+	LESS	shift 55
+	GREAT	shift 54
+	LESSEQ	shift 53
+	GREATEQ	shift 52
+	EQUAL	shift 51
+	ADD	shift 50
+	SUB	shift 49
+	DIV	shift 48
+	MUL	shift 47
+	REM	shift 46
+	AND	shift 45
+	OR	shift 44
+
+	OP2	goto 42
+
+	.	reduce by rule 15
+
+
+state 60:
+
+	COMMAND : WHILE EXP DO . COMMANDSEQ ENDWH 
+
+	BRACEL	shift 9
+
+	COMMANDSEQ	goto 68
+
+	.	error
+
+
+state 61:
+
+	VARIABLELIST : VARIABLELIST COMMA ID .  (reduce by rule 10)
+
+
+
+	.	reduce by rule 10
+
+
+state 62:
+
+	DECLARATION : VAR VARIABLELIST LISTYPE VTYPE . TERM 
+
+	TERM	shift 69
+
+
+	.	error
+
+
+state 63:
+
+	VTYPE : BOOL .  (reduce by rule 8)
+
+
+
+	.	reduce by rule 8
+
+
+state 64:
+
+	VTYPE : INT .  (reduce by rule 7)
+
+
+
+	.	reduce by rule 7
+
+
+state 65:
+
+	EXP : EXP OP2 FAC .  (reduce by rule 20)
+
+
+
+	.	reduce by rule 20
+
+
+state 66:
+
+	COMMAND : IF EXP THEN COMMANDSEQ . ELSE COMMANDSEQ ENDIF 
+
+	ELSE	shift 70
+
+
+	.	error
+
+
+state 67:
+
+	FAC : LEFTP EXP RIGHTP .  (reduce by rule 24)
+
+
+
+	.	reduce by rule 24
+
+
+state 68:
+
+	COMMAND : WHILE EXP DO COMMANDSEQ . ENDWH 
+
+	ENDWH	shift 71
+
+
+	.	error
+
+
+state 69:
+
+	DECLARATION : VAR VARIABLELIST LISTYPE VTYPE TERM .  (reduce by rule 6)
+
+
+
+	.	reduce by rule 6
+
+
+state 70:
+
+	COMMAND : IF EXP THEN COMMANDSEQ ELSE . COMMANDSEQ ENDIF 
+
+	BRACEL	shift 9
+
+	COMMANDSEQ	goto 72
+
+	.	error
+
+
+state 71:
+
+	COMMAND : WHILE EXP DO COMMANDSEQ ENDWH .  (reduce by rule 19)
+
+
+
+	.	reduce by rule 19
+
+
+state 72:
+
+	COMMAND : IF EXP THEN COMMANDSEQ ELSE COMMANDSEQ . ENDIF 
+
+	ENDIF	shift 73
+
+
+	.	error
+
+
+state 73:
+
+	COMMAND : IF EXP THEN COMMANDSEQ ELSE COMMANDSEQ ENDIF .  (reduce by rule 18)
+
+
+
+	.	reduce by rule 18
+
+
+state 74:
+
+
+	EOF	accept
+
+
+	.	error
+
+103 of 231 action table entries left after compaction
+38 goto table entries
